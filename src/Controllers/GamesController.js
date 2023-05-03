@@ -1,7 +1,5 @@
 module.exports = {
   async getGamesByUser(request, response) {
-    console.log(request)
-
     if(!request.params.id){
       return response.status(400).send('Invalid user id')
     }
@@ -13,18 +11,12 @@ module.exports = {
     return response.json(games);
   },
   async createGame(request, response) {
-    console.log(request)
-
     if(!request.body.user_id){
       return response.status(400).send('Invalid user_id')
     }
 
     if(!request.body.game_id){
       return response.status(400).send('Invalid game_id')
-    }
-
-    if(!request.body.current_status){
-      return response.status(400).send('Invalid current_status')
     }
    
     const gamesModel = require("../models/games");
