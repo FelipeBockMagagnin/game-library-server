@@ -1,8 +1,14 @@
 const db = require("../database/connection");
 
-async function select(user_id) {
+async function select(user_id, game_id = null) {
   const client = await db.connect();
-  const res = await client.query(`SELECT * FROM games where user_id = '${user_id}'`);
+  let where = ` user_id = '${user_id}' `;
+
+  if(game_id) {
+    where += ` and game_id = '${game_id}' `
+  }
+
+  const res = await client.query(`SELECT * FROM games where ${where}`);
   await client.end();
   return res.rows;
 }
@@ -23,4 +29,13 @@ async function insert(data) {
   return insertReturn;
 }
 
-module.exports = { select, insert, selectByGameID }
+async function deleteGame(data) {
+  const client = await db.connect();
+  const sql = 'Delete from games where game_id = $1 and user_id = $2;';
+  const values = [data.game_id, data.user_id];
+  const insertReturn = await client.query(sql, values);
+  await client.end();
+  return insertReturn;
+}
+
+module.exports = { select, insert, selectByGameID, deleteGame }

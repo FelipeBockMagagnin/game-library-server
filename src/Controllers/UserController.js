@@ -1,7 +1,5 @@
 module.exports = {
   async loginOrCreate(request, response) {
-    console.log(request)
-
     if(!request.body.email){
       return response.status(400).send('Invalid email')
     }
@@ -9,11 +7,9 @@ module.exports = {
     if(!request.body.id){
       return response.status(400).send('Invalid id')
     }
-
    
     const usersModel = require("../models/users");
     let user = await usersModel.select(request.body.id);
-    console.log(user);
 
     let user_response = {
       google_data: request.body,
@@ -30,8 +26,6 @@ module.exports = {
       email: request.body.email,
       name: request.body.name
     });
-
-    console.log('new user created', new_user)
 
     if(new_user.row_count == 0) {
       return response.status(500).send('Cant create a user now')
